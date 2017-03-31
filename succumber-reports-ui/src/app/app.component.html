@@ -1,0 +1,53 @@
+<div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+  <div class="ui-g-2 ui-sm-1 ui-g-nopad">
+    <a href="../" class="w3-bar-item w3-button w3-no-padding">
+       <span class="fa-stack fa-lg" aria-hidden="true">
+         <i class="fa fa-arrow-left fa-fw fa-stack-1x"></i>
+      </span>
+      Back to Jenkins</a>
+  </div>
+
+  <div class="ui-g-10 ui-sm-11 ui-g-nopad">
+    <a routerLink="" class="w3-bar-item w3-button w3-no-padding">
+      <span class="fa-stack fa-lg w3-text-green" aria-hidden="true">
+        <i class="fa fa-certificate fa-stack-2x"></i>
+        <i class="fa fa-hand-peace-o fa-inverse fa-stack-1x"></i>
+      </span>
+      <strong class="w3-text-green">Succumber Reports</strong>
+    </a>
+    <a routerLink="" class="w3-bar-item w3-button w3-no-padding">
+      <span class="fa-stack fa-lg w3-text-red" aria-hidden="true">
+        <i class="fa fa-certificate fa-stack-2x"></i>
+        <i class="fa fa-thumbs-o-down fa-inverse fa-stack-1x"></i>
+      </span>
+      <strong class="w3-text-red">Succumber Reports</strong>
+    </a>
+    <a routerLink="stats" class="w3-bar-item w3-right w3-button w3-no-padding">
+       <span class="fa-stack fa-lg" aria-hidden="true">
+         <i class="fa fa-dashboard fa-fw fa-stack-1x"></i>
+      </span>
+      Stats</a>
+
+    <a routerLink="tags" class="w3-bar-item w3-right w3-button w3-no-padding">
+      <span class="fa-stack fa-lg" aria-hidden="true">
+         <i class="fa fa-at fa-fw fa-stack-1x"></i>
+      </span>
+      Tags</a>
+    <a routerLink="features" class="w3-bar-item w3-right w3-button w3-no-padding">
+      <span class="fa-stack fa-lg" aria-hidden="true">
+         <i class="fa fa-list fa-fw fa-stack-1x"></i>
+      </span>
+      Features</a>
+    <div class="w3-bar-item w3-right w3-no-padding">
+      <input type="text" icon="fa fa-search" [(ngModel)]="name" placeholder=" &#x2315; Search not implemented" disabled="true" pInputText>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="w3-main" style="margin-top:43px;">
+  <router-outlet></router-outlet>
+</div>
+
+
