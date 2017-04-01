@@ -13,6 +13,11 @@ import {MainComponent} from './main/main.component';
 import {FeaturesComponent} from './features/features.component';
 import {TagsComponent} from './tags/tags.component';
 import {StatsComponent} from './stats/stats.component';
+import {FeaturesService} from "./services/features.service";
+import {DataSource} from "./utils/data-source.util";
+import {InMemoryWebApiModule} from "angular-in-memory-web-api";
+import {LocalInterceptor} from "./utils/local-interceptor";
+import {LocalHttp} from "./utils/local-http";
 
 @NgModule({
   declarations: [
@@ -44,9 +49,12 @@ import {StatsComponent} from './stats/stats.component';
         component: TagsComponent
       }
 
-    ])
+    ], {
+      useHash: location.protocol.startsWith("file")
+    }),
+    InMemoryWebApiModule.forRoot(LocalInterceptor, {passThruUnknownUrl:true})
   ],
-  providers: [],
+  providers: [FeaturesService, DataSource],
   bootstrap: [AppComponent]
 })
 export class AppModule {
