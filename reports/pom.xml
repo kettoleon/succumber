@@ -7,6 +7,7 @@
     <modules>
         <module>succumber-reports-gherkin</module>
         <module>succumber-reports-gherkin-acceptance-tests</module>
+        <module>succumber-reports-ui</module>
     </modules>
 
     <parent>
