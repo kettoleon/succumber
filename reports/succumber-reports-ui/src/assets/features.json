@@ -1,12 +1,13 @@
 {
+  "asset": "features",
   "data": [
     {
-      "id": "potato.feature",
-      "name": "Potato Service"
+      "id": "cars.feature",
+      "name": "Cars REST api"
     },
     {
-      "id": "potatoAsync.feature",
-      "name": "Potato Async Service Collector Helper Destroyer"
+      "id": "models.feature",
+      "name": "Models REST api"
     }
   ]
 }

@@ -1,0 +1,13 @@
+declareAsset({
+    "asset": "features",
+    "data": [
+      {
+        "id": "cars.feature",
+        "name": "Cars REST api"
+      },
+      {
+        "id": "models.feature",
+        "name": "Models REST api"
+      }
+    ]
+  });
