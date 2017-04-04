@@ -1,0 +1,13 @@
+{
+  "modules": [
+    {
+      "id": "gherkin-acceptance-tests",
+      "title": "Gherkin Formatter Tests",
+      "description":"These tests check that Succumber formatter for Cucumber works fine.",
+      "features":[
+        "cucumber/"
+      ],
+      "reportsTargetPath": "../../../target/reports/succumber"
+    }
+  ]
+}

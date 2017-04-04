@@ -12,7 +12,7 @@ import ch.qos.logback.classic.Logger;
 @CucumberOptions(
         glue = {"com.github.kettoleon.succumber.reports.gherkin.cucumber"},
         plugin = {
-                "com.github.kettoleon.succumber.reports.gherkin.SuccumberFormatter:src/test/resources/reports/succumber-reports.json"},
+                "com.github.kettoleon.succumber.reports.gherkin.SuccumberFormatter"},
         features = {"src/test/resources/cucumber"}
 )
 public class SuccumberReportsGherkinAcceptanceTest {
