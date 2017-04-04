@@ -11,19 +11,18 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>succumber-reports-gherkin</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>succumber-reports-generator</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.github.kettoleon.succumber</groupId>
-            <artifactId>succumber-reports-generator</artifactId>
+            <artifactId>succumber-reports-ui</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>info.cukes</groupId>
-            <artifactId>gherkin</artifactId>
-            <version>RELEASE</version>
+            <groupId>com.github.kettoleon.succumber</groupId>
+            <artifactId>succumber-config</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

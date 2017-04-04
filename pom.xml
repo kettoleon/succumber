@@ -12,6 +12,7 @@
 
     <modules>
         <module>reports</module>
+        <module>config</module>
     </modules>
 
 

@@ -1,8 +1,12 @@
 package com.github.kettoleon.succumber.reports.gherkin;
 
-import com.github.kettoleon.succumber.model.configuration.Configuration;
-import com.github.kettoleon.succumber.model.configuration.Module;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.github.kettoleon.succumber.configuration.model.Configuration;
+import com.github.kettoleon.succumber.configuration.model.Module;
 import gherkin.formatter.Formatter;
 import gherkin.formatter.Reporter;
 import gherkin.formatter.model.*;
@@ -27,22 +31,23 @@ public class SuccumberFormatter implements Formatter, Reporter {
     private FeatureDescription currentFeature;
     private ScenarioDescription currentScenario;
     private boolean currentlyInBackground = false;
-    private Gson gson = new Gson();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     public SuccumberFormatter() {
         log.trace("{} instantiated", SuccumberFormatter.class.getSimpleName());
         //Load DI context and configuration
 
         //Configuration loader should be common and reusable.
+        //It should parse some of the fields and even validate them.
         //We should select here the current module
         try {
-            configuration = gson.fromJson(new FileReader("src/test/resources/succumber.json"), Configuration.class);
+            configuration = objectMapper.readValue(new FileReader("src/test/resources/succumber.json"), Configuration.class);
             currentModule = configuration.getModules().iterator().next();
             currentTargetFolder = new File(new File("src/test/resources/succumber.json").getAbsoluteFile().getParentFile(), currentModule.getReportsTargetPath());
             currentTargetFolder = currentTargetFolder.toPath().normalize().toFile();
             log.info("targetFolder: " + currentTargetFolder.getAbsoluteFile().getPath());
             FileUtils.deleteQuietly(currentTargetFolder);
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Unable to load succumber configuration");
         }
@@ -130,7 +135,9 @@ public class SuccumberFormatter implements Formatter, Reporter {
         featuresAssetFile.getParentFile().mkdirs();
         FileWriter fileWriter = new FileWriter(featuresAssetFile);
         fileWriter.append("declareAsset(");
-        gson.toJson(asset, fileWriter);
+        ObjectWriter jsonWriter = objectMapper.writerFor(Asset.class).without(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
+        jsonWriter.writeValue(fileWriter,asset);
+//        objectMapper.writeValue(fileWriter, asset);
         fileWriter.append(");");
         fileWriter.close();
     }

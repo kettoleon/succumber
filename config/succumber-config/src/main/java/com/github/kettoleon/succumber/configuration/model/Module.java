@@ -1,4 +1,4 @@
-package com.github.kettoleon.succumber.model.configuration;
+package com.github.kettoleon.succumber.configuration.model;
 
 import java.util.LinkedHashSet;
 import java.util.List;
