@@ -136,33 +136,18 @@ public class SuccumberFormatter implements Formatter, Reporter {
         FileWriter fileWriter = new FileWriter(featuresAssetFile);
         fileWriter.append("declareAsset(");
         ObjectWriter jsonWriter = objectMapper.writerFor(Asset.class).without(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
-        jsonWriter.writeValue(fileWriter,asset);
+        jsonWriter.writeValue(fileWriter, asset);
 //        objectMapper.writeValue(fileWriter, asset);
         fileWriter.append(");");
         fileWriter.close();
     }
 
     private void extractUI() throws IOException {
-        String resourcesFolder = "succumber-reports-ui";
-        InputStream folder = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcesFolder);
 
+        ResourceFolderExtractor rfe = new ResourceFolderExtractor("succumber-reports-ui", currentTargetFolder);
+        rfe.extract();
 
-        List<String> files = Arrays.asList(IOUtils.toString(folder, "UTF-8").split("\\n"));
-        for (String file : files) {
-            if (file.matches(".*\\..*")) {
-//                System.out.println("Unpacking: " + file);
-                unpack(resourcesFolder + "/" + file, new File(currentTargetFolder, file));
-            } else {
-//                System.out.println("Skipping:  " + file);
-            }
-        }
     }
-
-    private void unpack(String resource, File targetFile) throws IOException {
-        FileUtils.copyInputStreamToFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(resource), targetFile);
-    }
-
-
 
     /* Reporter methods */
 

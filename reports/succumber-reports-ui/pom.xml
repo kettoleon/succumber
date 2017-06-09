@@ -28,19 +28,21 @@
         <executions>
           <execution>
             <id>Install node and npm</id>
+            <phase>compile</phase>
             <goals>
               <goal>install-node-and-npm</goal>
             </goals>
           </execution>
           <execution>
             <id>Install project dependencies</id>
+            <phase>compile</phase>
             <goals>
               <goal>npm</goal>
             </goals>
           </execution>
           <execution>
             <id>npm run-script build</id>
-            <phase>prepare-package</phase>
+            <phase>compile</phase>
             <goals>
               <goal>npm</goal>
             </goals>
