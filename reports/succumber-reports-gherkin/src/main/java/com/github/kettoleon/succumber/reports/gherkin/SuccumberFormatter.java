@@ -1,8 +1,6 @@
 package com.github.kettoleon.succumber.reports.gherkin;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.kettoleon.succumber.configuration.model.Configuration;
@@ -11,13 +9,14 @@ import gherkin.formatter.Formatter;
 import gherkin.formatter.Reporter;
 import gherkin.formatter.model.*;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SuccumberFormatter implements Formatter, Reporter {
@@ -32,6 +31,8 @@ public class SuccumberFormatter implements Formatter, Reporter {
     private ScenarioDescription currentScenario;
     private boolean currentlyInBackground = false;
     private ObjectMapper objectMapper = new ObjectMapper();
+    private Match currentMatch;
+    private Step currentStep;
 
     public SuccumberFormatter() {
         log.trace("{} instantiated", SuccumberFormatter.class.getSimpleName());
@@ -46,17 +47,17 @@ public class SuccumberFormatter implements Formatter, Reporter {
             currentTargetFolder = new File(new File("src/test/resources/succumber.json").getAbsoluteFile().getParentFile(), currentModule.getReportsTargetPath());
             currentTargetFolder = currentTargetFolder.toPath().normalize().toFile();
             log.info("targetFolder: " + currentTargetFolder.getAbsoluteFile().getPath());
+
+            // Clear previous assets if they exist
             FileUtils.deleteQuietly(currentTargetFolder);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Unable to load succumber configuration");
         }
-        // Clear previous assets if they exist
-
     }
 
     public void syntaxError(String s, String s1, List<String> list, String s2, Integer integer) {
-
+        //TODO handle syntax errors
     }
 
     public void uri(String uri) {
@@ -70,11 +71,11 @@ public class SuccumberFormatter implements Formatter, Reporter {
     }
 
     public void scenarioOutline(ScenarioOutline scenarioOutline) {
-
+        //It would seem we don't need to keep track of these for reporting purposes
     }
 
     public void examples(Examples examples) {
-
+        //It would seem we don't need to keep track of these for reporting purposes
     }
 
     public void startOfScenarioLifeCycle(Scenario scenario) {
@@ -92,11 +93,7 @@ public class SuccumberFormatter implements Formatter, Reporter {
     }
 
     public void step(Step step) {
-        if (currentlyInBackground) {
-            currentScenario.addBackgroundStep(step);
-        } else {
-            currentScenario.addScenarioStep(step);
-        }
+       currentStep = step;
     }
 
     public void endOfScenarioLifeCycle(Scenario scenario) {
@@ -122,7 +119,7 @@ public class SuccumberFormatter implements Formatter, Reporter {
 
             //Close streams
             //Extract succumber-reports-ui folder
-            extractUI();
+            new ResourceFolderExtractor("succumber-reports-ui", currentTargetFolder).extract();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -137,41 +134,39 @@ public class SuccumberFormatter implements Formatter, Reporter {
         fileWriter.append("declareAsset(");
         ObjectWriter jsonWriter = objectMapper.writerFor(Asset.class).without(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
         jsonWriter.writeValue(fileWriter, asset);
-//        objectMapper.writeValue(fileWriter, asset);
         fileWriter.append(");");
         fileWriter.close();
-    }
-
-    private void extractUI() throws IOException {
-
-        ResourceFolderExtractor rfe = new ResourceFolderExtractor("succumber-reports-ui", currentTargetFolder);
-        rfe.extract();
-
     }
 
     /* Reporter methods */
 
     public void before(Match match, Result result) {
-
+        System.out.format("before: %s %s\n", match.getLocation(), result.getStatus());
     }
 
     public void result(Result result) {
-
+        System.out.format("result: %s\n", result.getStatus());
+        if (currentlyInBackground) {
+            currentScenario.addBackgroundStep(new StepExecution(currentStep,currentMatch,result));
+        } else {
+            currentScenario.addScenarioStep(new StepExecution(currentStep,currentMatch,result));
+        }
     }
 
     public void after(Match match, Result result) {
-
+        System.out.format("after: %s %s\n", match.getLocation(), result.getStatus());
     }
 
     public void match(Match match) {
-
+        System.out.format("match: %s\n", match.getLocation());
+        currentMatch = match;
     }
 
     public void embedding(String s, byte[] bytes) {
-
+        System.out.format("embedding: %s\n", s);
     }
 
     public void write(String s) {
-
+        System.out.format("write: %s\n", s);
     }
 }

@@ -1,8 +1,6 @@
 package com.github.kettoleon.succumber.reports.gherkin;
 
-import gherkin.formatter.model.Background;
-import gherkin.formatter.model.Scenario;
-import gherkin.formatter.model.Step;
+import gherkin.formatter.model.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,8 +8,8 @@ import java.util.List;
 public class ScenarioDescription {
     private final Scenario scenario;
     private Background background;
-    private List<Step> backgroundSteps = new LinkedList<>();
-    private List<Step> scenarioSteps = new LinkedList<>();
+    private List<StepExecution> backgroundSteps = new LinkedList<>();
+    private List<StepExecution> scenarioSteps = new LinkedList<>();
 
     public ScenarioDescription(Scenario scenario) {
         this.scenario = scenario;
@@ -25,11 +23,11 @@ public class ScenarioDescription {
         return background;
     }
 
-    public void addBackgroundStep(Step step) {
+    public void addBackgroundStep(StepExecution step) {
         backgroundSteps.add(step);
     }
 
-    public void addScenarioStep(Step step) {
+    public void addScenarioStep(StepExecution step) {
         scenarioSteps.add(step);
     }
 
@@ -37,11 +35,11 @@ public class ScenarioDescription {
         return scenario;
     }
 
-    public List<Step> getBackgroundSteps() {
+    public List<StepExecution> getBackgroundSteps() {
         return backgroundSteps;
     }
 
-    public List<Step> getScenarioSteps() {
+    public List<StepExecution> getScenarioSteps() {
         return scenarioSteps;
     }
 }
